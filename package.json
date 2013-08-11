@@ -1,0 +1,13 @@
+{
+	"name": "laskya",
+	"version": "0.0.1",
+	"description": "A calculator in javascript",
+	"bugs": "http://github.com/twiss/laskya/issues",
+	"author": "Daniel Huigens <d.huigens@gmail.com>",
+	"dependencies": {
+		"underscore": "*"
+	},
+	"scripts": {
+		"test": "node ./test/run.js"
+	}
+}
