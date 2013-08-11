@@ -108,7 +108,7 @@ Approx
 > toFraction .5
 < 1/2
 
-> approx[5/1.333333]
+> approx[5/1.3333333333333]
 < 3.75
 
 > approx 3.75
