@@ -118,6 +118,16 @@ Approx
 < 3.14159265359
 
 
+Mixed calculating and solving
+-----------------------------
+
+> a: 1
+< 1
+
+> a +: 1; b; a
+< 2
+
+
 Unit Conversion
 ---------------
 
