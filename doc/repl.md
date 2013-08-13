@@ -54,6 +54,39 @@ Operators
 > -a - -a
 < 0
 
+* multiplies numbers
+
+> 6 * 8
+< 48
+
+implied * also works
+
+> 6 8
+< 48
+
+* also multiplies strings
+
+> "6"8
+< "66666666"
+
+/ divides stuff
+
+> 1/2 + 1/3
+< 5/6 = 0.833333333333
+
+> a^2/a
+< a
+
+a\b is floor[a/b]
+
+> 25\3
+< 8
+
+mod is modulo or remainder
+
+> 25 mod 3
+< 1
+
 
 Variables
 ---------
