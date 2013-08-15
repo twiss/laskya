@@ -174,6 +174,11 @@ if(ok) {
 		});
 		repl.stdin.write(q + '\n');
 	});
+	repl.on('close', function() {
+		console.log('The REPL closed unexpectedly at test "' + repltests[repltest].split('\n')[0] + '".');
+		ok = false;
+		routineDone();
+	});
 })();
 
 
