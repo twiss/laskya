@@ -180,6 +180,28 @@ Unit Conversion
 < 180
 
 
+Logical Operators
+-----------------
+
+> True & True & False
+< False
+
+> ~True & False
+> False
+
+> 6 & 8
+< 8
+
+> 0 & 8
+< 0
+
+> 6 | 8
+< 6
+
+> 0 | 8
+< 8
+
+
 Autocompletion
 --------------
 
