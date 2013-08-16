@@ -143,11 +143,11 @@ if(ok) {
 
 (function() {
 	var repl = require('child_process').spawn('node', ['./repl/repl.js']);
-	var repltests = read('doc/repl.md').match(/> .+\n< .+/g);
+	var repltests = read('doc/repl.md').match(/> .+\n\t< .+/g);
 	var repltest = 0;
 	var table = [];
 	repl.stdout.on('data', function question(data) {
-		var test = repltests[repltest].split('\n'),
+		var test = repltests[repltest].split('\n\t'),
 			q = test[0].substr(2),
 			a = test[1].substr(2);
 		repl.stdout.removeListener('data', question);
@@ -175,7 +175,7 @@ if(ok) {
 		repl.stdin.write(q + '\n');
 	});
 	repl.on('close', function() {
-		console.log('The REPL closed unexpectedly at test "' + repltests[repltest].split('\n')[0] + '".');
+		console.log('The REPL closed unexpectedly at test "' + repltests[repltest].split('\n\t')[0] + '".');
 		ok = false;
 		routineDone();
 	});
