@@ -190,6 +190,7 @@ var options = {
 	undef: true,
 	strict: true,
 	trailing: true,
+	node: true, // for the repl
 	'-W004': true,
 	'-W006': true,
 	'-W007': true,
@@ -197,17 +198,22 @@ var options = {
 	'-W018': true,
 	'-W030': true,
 	'-W065': true,
-	'-W086': true,
-	'-W093': true
-};
-var globals = {
-	MathContext: false,
-	BigDecimal: false,
-	setTimeout: false,
-	clearTimeout: false
+	//'-W086': true,
+	//'-W093': true
 };
 var table = [];
-_.each(['lib/laskya.js'], function(path) {
+_.each({
+	'lib/laskya.js': {
+		MathContext: false,
+		BigDecimal: false,
+		setTimeout: false,
+		clearTimeout: false
+	},
+	'repl/repl.js': {
+		_: false,
+		laskya: false
+	}
+}, function(path, globals) {
 	var src = read(path);
 	if(!JSHINT(src, options, globals)) {
 		ok = false;

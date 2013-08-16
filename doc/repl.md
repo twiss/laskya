@@ -207,6 +207,27 @@ Logical Operators
 	> 0 | 8
 	< 8
 
+NaN and Infinity
+----------------
+
+	> 1 + True
+	< NaN
+	
+	> NaN + 1
+	< NaN
+	
+	> Infinity + 1
+	< Infinity
+	
+	> Infinity - Infinity
+	< Infinity
+	
+	> 1/0
+	< NaN
+	
+	> 0/0
+	< NaN
+
 
 Autocompletion
 --------------

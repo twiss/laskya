@@ -173,9 +173,8 @@ function display(result, parent, rightHand, noParens) {
 		case 'exactnumber':
 			if(!(result.nom % 1 || result.den % 1)) {
 				return result.nom.toString() + '/' + result.den.toString();
-			} else {
-				return result.toString();
 			}
+			return result.toString();
 		case 'bool':
 			return result ? 'True' : 'False';
 		case 'number':
