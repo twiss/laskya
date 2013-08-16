@@ -184,6 +184,7 @@ function display(result, parent, rightHand, noParens) {
 				//var fract = predefs.toFraction(result);
 				return laskya.predefs.round(result, 12) + '';
 			}
+			return result + '';
 		case 'function':
 			return '(function' + (result.name ? ' ' + result.name : '') + ')';
 		case 'string':
