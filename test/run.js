@@ -1,15 +1,6 @@
-#!/usr/bin/env node
-
-
 // UTIL
 
 var ok = true;
-
-var fs = require('fs');
-var fileCache = {};
-function read(path) {
-	return fileCache[path] || (fileCache[path] = fs.readFileSync(path, 'utf-8'));
-}
 
 var routinesDone = 0;
 function routineDone() {
@@ -18,7 +9,8 @@ function routineDone() {
 	}
 }
 
-var columns = process.stdout.getWindowSize()[0];
+var node = typeof process !== 'undefined';
+var columns = node ? process.stdout.getWindowSize()[0] : 80;
 function logTable(table) {
 	var max = [],
 		maxcols;
@@ -42,10 +34,12 @@ function logTable(table) {
 
 // INIT
 
-var laskya = require('../lib/laskya');
-var _ = laskya._;
-var BigDecimal = laskya.BigDecimal;
-laskya = laskya.laskya;
+if(node) {
+	var laskya = require('../lib/laskya');
+	var _ = laskya._;
+	var BigDecimal = laskya.BigDecimal;
+	laskya = laskya.laskya;
+}
 
 
 // CORE TESTS
@@ -134,104 +128,118 @@ test('toRepeatingFraction[20.1+1/7]', [1417, 70]);
 logTable(table);
 
 if(ok) {
-	console.log('All tests passed!\n');
+	console.log('All tests passed!');
 } else {
-	console.log(failed + '/' + tests + ' tests failed.\n');
+	console.log(failed + '/' + tests + ' tests failed.');
 }
 
-
-// REPL TEST
-
-(function() {
-	var repl = require('child_process').spawn('node', ['./repl/repl.js']);
-	var repltests = read('doc/repl.md').match(/> .+\n\t< .+/g);
-	var repltest = 0;
-	var table = [];
-	repl.stdout.on('data', function question(data) {
-		var test = repltests[repltest].split('\n\t'),
-			q = test[0].substr(2),
-			a = test[1].substr(2);
-		repl.stdout.removeListener('data', question);
-		repl.stdout.on('data', function answer(data) {
-			var result = data.toString().match(/< (.+)/);
-			if(!result) return;
-			repl.stdout.removeListener('data', answer);
-			result = result[1];
-			if(result !== a) {
-				ok = false;
-				table.push([test[0], 'was ' + result + ',', 'expected ' + a]);
-			}
-			repltest++;
-			if(repltest === repltests.length) {
-				repl.kill();
-				logTable(table);
-				console.log(table.length + '/' + repltests.length + ' tests failed.');
-				routineDone();
-			} else if(/\n> /.test(data)) {
-				question();
-			} else {
-				repl.stdout.on('data', question);
-			}
-		});
-		repl.stdin.write(q + '\n');
-	});
-	repl.on('close', function() {
-		console.log('The REPL closed unexpectedly at test "' + repltests[repltest].split('\n\t')[0] + '".');
-		ok = false;
-		routineDone();
-	});
-})();
-
-
-// CHECK CODE STYLE
-
-var JSHINT = require('jshint').JSHINT;
-var options = {
-	smarttabs: true,
-	undef: true,
-	trailing: true,
-	node: true, // for the repl
-	'-W004': true,
-	'-W007': true,
-	'-W008': true,
-	'-W018': true,
-	'-W030': true,
-};
-var table = [];
-_.each({
-	'lib/laskya.js': {
-		MathContext: true,
-		BigDecimal: true,
-		setTimeout: false,
-		clearTimeout: false
-	},
-	'repl/repl.js': {}
-}, function(path, globals) {
-	var src = read(path);
-	if(!JSHINT(src, options, globals)) {
-		ok = false;
-		for(var i = 0; i < JSHINT.errors.length; i++) {
-			var error = JSHINT.errors[i];
-			if(error) {
-				table.push([path, 'line ' + error.line, 'col ' + error.character + ':', error.reason, error.evidence ? error.evidence.replace(/^\t+/, '') : '', '(' + error.code + ')']);
-			}
-		}
+if(node) {
+	
+	console.log();
+	
+	// UTIL
+	
+	var fs = require('fs');
+	var fileCache = {};
+	function read(path) {
+		return fileCache[path] || (fileCache[path] = fs.readFileSync(path, 'utf-8'));
 	}
 	
-	// Space-indented lines
-	src.replace(/^ /gm, function(match, offset) {
-		ok = false;
-		table.push([path, 'line ' + src.substr(0, offset).split('\n').length + ':', , 'Indented with spaces']);
-		return match;
-	});
 	
-	// Lines that are not indented but should be
-	src.replace(/\t+.*\n\n+\t/g, function(match, offset) {
-		ok = false;
-		table.push([path, 'line ' + (src.substr(0, offset).split('\n').length + 1) + ':', , 'Not indented']);
-		return match;
-	});
-});
-logTable(table);
+	// REPL TEST
+	
+	(function() {
+		var repl = require('child_process').spawn('node', ['./repl/repl.js']);
+		var repltests = read('doc/repl.md').match(/> .+\n\t< .+/g);
+		var repltest = 0;
+		var table = [];
+		repl.stdout.on('data', function question(data) {
+			var test = repltests[repltest].split('\n\t'),
+				q = test[0].substr(2),
+				a = test[1].substr(2);
+			repl.stdout.removeListener('data', question);
+			repl.stdout.on('data', function answer(data) {
+				var result = data.toString().match(/< (.+)/);
+				if(!result) return;
+				repl.stdout.removeListener('data', answer);
+				result = result[1];
+				if(result !== a) {
+					ok = false;
+					table.push([test[0], 'was ' + result + ',', 'expected ' + a]);
+				}
+				repltest++;
+				if(repltest === repltests.length) {
+					repl.kill();
+					logTable(table);
+					console.log(table.length + '/' + repltests.length + ' tests failed.');
+					routineDone();
+				} else if(/\n> /.test(data)) {
+					question();
+				} else {
+					repl.stdout.on('data', question);
+				}
+			});
+			repl.stdin.write(q + '\n');
+		});
+		repl.on('close', function() {
+			console.log('The REPL closed unexpectedly at test "' + repltests[repltest].split('\n\t')[0] + '".');
+			ok = false;
+			routineDone();
+		});
+	})();
 
-routineDone();
+
+	// CHECK CODE STYLE
+
+	var JSHINT = require('jshint').JSHINT;
+	var options = {
+		smarttabs: true,
+		undef: true,
+		trailing: true,
+		node: true, // for the repl
+		'-W004': true,
+		'-W007': true,
+		'-W008': true,
+		'-W018': true,
+		'-W030': true,
+	};
+	var table = [];
+	_.each({
+		'lib/laskya.js': {
+			MathContext: true,
+			BigDecimal: true,
+			setTimeout: false,
+			clearTimeout: false
+		},
+		'repl/repl.js': {}
+	}, function(path, globals) {
+		var src = read(path);
+		if(!JSHINT(src, options, globals)) {
+			ok = false;
+			for(var i = 0; i < JSHINT.errors.length; i++) {
+				var error = JSHINT.errors[i];
+				if(error) {
+					table.push([path, 'line ' + error.line, 'col ' + error.character + ':', error.reason, error.evidence ? error.evidence.replace(/^\t+/, '') : '', '(' + error.code + ')']);
+				}
+			}
+		}
+		
+		// Space-indented lines
+		src.replace(/^ /gm, function(match, offset) {
+			ok = false;
+			table.push([path, 'line ' + src.substr(0, offset).split('\n').length + ':', , 'Indented with spaces']);
+			return match;
+		});
+		
+		// Lines that are not indented but should be
+		src.replace(/\t+.*\n\n+\t/g, function(match, offset) {
+			ok = false;
+			table.push([path, 'line ' + (src.substr(0, offset).split('\n').length + 1) + ':', , 'Not indented']);
+			return match;
+		});
+	});
+	logTable(table);
+
+	routineDone();
+	
+}
