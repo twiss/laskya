@@ -35,9 +35,9 @@ function logTable(table) {
 // INIT
 
 if(node) {
-	var laskya = require('../lib/laskya');
-	var _ = laskya._;
-	var BigDecimal = laskya.BigDecimal;
+	laskya = require('../lib/laskya');
+	_ = laskya._;
+	BigDecimal = laskya.BigDecimal;
 	laskya = laskya.laskya;
 }
 
@@ -81,6 +81,13 @@ function equal(a, b, approx) {
 }
 
 var tests = 0, failed = 0;
+if(typeof JSON === 'undefined') {
+	JSON = {
+		stringify: function(val) {
+			return val + '';
+		}
+	};
+}
 function test(input, expected, options) {
 	tests++;
 	try {
@@ -100,6 +107,8 @@ function test(input, expected, options) {
 var table = [];
 test('6 * 8', 48);
 test('2e', 5.4365637, {approx: true});
+test('012', 12);
+test('0xff', 255);
 test('-3 - - 5 + - 1', 1);
 test('(1+2)(1-2)', -3);
 test('sin .723^2', 0.5, {approx: true});
@@ -150,7 +159,7 @@ if(node) {
 	
 	(function() {
 		var repl = require('child_process').spawn('node', ['./repl/repl.js']);
-		var repltests = read('doc/repl.md').match(/> .+\n\t< .+/g);
+		var repltests = read('doc/repl.md').match(/> .+\r?\n\t< .+/g);
 		var repltest = 0;
 		var table = [];
 		repl.stdout.on('data', function question(data) {
@@ -171,7 +180,11 @@ if(node) {
 				if(repltest === repltests.length) {
 					repl.kill();
 					logTable(table);
-					console.log(table.length + '/' + repltests.length + ' tests failed.');
+					if(table.length) {
+						console.log(table.length + '/' + repltests.length + ' tests failed.');
+					} else {
+						console.log('All tests passed!');
+					}
 					routineDone();
 				} else if(/\n> /.test(data)) {
 					question();
@@ -201,7 +214,7 @@ if(node) {
 		'-W007': true,
 		'-W008': true,
 		'-W018': true,
-		'-W030': true,
+		'-W030': true
 	};
 	var table = [];
 	_.each({
