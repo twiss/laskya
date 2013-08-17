@@ -78,7 +78,7 @@ implied `*` also works
 `/` divides stuff
 
 	> 1/2 + 1/3
-	< 5/6 = 0.833333333333
+	< 5/6
 	
 	> a^2/a
 	< a
@@ -206,6 +206,14 @@ Logical Operators
 	
 	> 0 | 8
 	< 8
+
+
+Differentiate
+-------------
+
+	> [1/x^2]'
+	< -2/x^3
+
 
 NaN and Infinity
 ----------------

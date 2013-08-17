@@ -48,13 +48,14 @@ rl.prompt();
 
 rl.on('line', function(input) {
 	var tree = laskya.parse(laskya.tokenize(input));
+	var result, result_display, error;
 	try {
-		var result = laskya.evaluate(input);
-		var result_display = display(result);
+		result = laskya.evaluate(input);
+		result_display = display(result);
 	} catch(e) {
-		var result = e;
-		var result_display = e.stack || e + '';
-		var error = true;
+		result = e;
+		result_display = e.stack || e + '';
+		error = true;
 	}
 	var tree_display = display(tree);
 	if(tree_display !== input.replace(/\s|@/g, '') && tree_display !== result_display) {
@@ -95,40 +96,22 @@ function display(result, parent, rightHand, noParens) {
 			case 'invocation':
 				var invocationParens = true,
 					noArgs = false,
-					between = '',
-					fn;
-				try {
-					fn = (_.isString(input.value) ? getVar : calculate)(input.value) || {};
-				} catch(e) {
-					fn = {};
-				}
+					between = '';
 				if(input.args) {
 					if(_.isArray(input.args)) {
 						if((_.isString(input.value) ? input.value : input.value.value) === 'sqrt') {
 							if(input.args[1]) {
 								if(input.args[1].compareTo(BigDecimal.TWO)) {
-									input.pro = [constObj(display(input.args[1]))];
+									input.pro = [{type: 'const', value: display(input.args[1])}];
 								}
 								input.args = [input.args[0]];
 							}
 						}
-						input.args = constObj(input.args.map(display).join('\\text", "'));
+						input.args = {type: 'const', value: input.args.map(display).join('\\text", "')};
 					} else if(input.args.type === 'invocation') {
 						invocationParens = false;
 						between = ' ';
 					}
-				}
-				if(invocationParens) {
-					if(laskya.getflag(fn, 'functionnon')) {
-						invocationParens = false;
-						noArgs = true;
-					}
-				} else {
-					try {
-						if(laskya.getflag(getVar(input.args.value), 'functionnon')) {
-							invocationParens = true;
-						}
-					} catch(e) {}
 				}
 				var pro = '';
 				if(input.pro) {

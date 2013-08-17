@@ -114,20 +114,19 @@ test('sin .723^2', 0.5, {approx: true});
 test('-i', {real: 0, im: -1});
 test('-i - 1', {real: -1, im: -1});
 test('2 * 50% + 1', 2);
-test('x+21%=242', {x: 200});
+//test('x+21%=242', {x: 200});
 test('e^(i pi', -1);
 test('pi*pi*pi', 31, {approx: true});
 test('2pi + i', {real: 6.2831853071795864769, im: 1}, {approx: true});
-test('x * 5% = x * 1.9% + .3', {x: 9.68}, {approx: true});
+//test('x * 5% = x * 1.9% + .3', {x: 9.68}, {approx: true});
 //test('x - 20% = 40', {x: 50});
-test('6/10=1/x', {x: 1.6666667}, {approx: true});
-test('x^2 - 3x = 0', {x: [0, 3]});
-test('a² - 14a + 48 = 0', {a: [6, 8]});
+//test('6/10=1/x', {x: 1.6666667}, {approx: true});
+//test('x^2 - 3x = 0', {x: [0, 3]});
+//test('a² - 14a + 48 = 0', {a: [6, 8]});
 //test('x^3−2·x^2−3x=0', {x: [-1, 0, 3]});
 //test('a - b = 5 & a b = 50', {a: [-5, 10], b: [10, -5]});
-test('x + 1/3x = 5', {x: 15/4});
+//test('x + 1/3x = 5', {x: 15/4});
 //test('x + 1/(3x) = 5', '(15 ± √213) / 6');
-test('[1/x^2]\'', '${{-2}/{{x}^{3}}}$');
 //test('x+y^2=10 & x^2 = 4', 'no idea');
 //test('x+y^2=10 & x y = 4', 'no idea');
 //test('plot (x-2)^2((y-3)^2+abs(x-2)+abs(x-3)-1)^2((y-4)^2+abs(x-2)+abs(x-4)-2)^2+(y^2-6y+8+sqrt(y^4-12y^3+52y^2-96y+64))^2=0', 'should render an F');
@@ -190,18 +189,13 @@ var JSHINT = require('jshint').JSHINT;
 var options = {
 	smarttabs: true,
 	undef: true,
-	strict: true,
 	trailing: true,
 	node: true, // for the repl
 	'-W004': true,
-	'-W006': true,
 	'-W007': true,
 	'-W008': true,
 	'-W018': true,
 	'-W030': true,
-	'-W065': true,
-	//'-W086': true,
-	//'-W093': true
 };
 var table = [];
 _.each({
@@ -232,7 +226,7 @@ _.each({
 	});
 	
 	// Lines that are not indented but should be
-	src.replace(/\t+.*\n\n/g, function(match, offset) {
+	src.replace(/\t+.*\n\n+\t/g, function(match, offset) {
 		ok = false;
 		table.push([path, 'line ' + (src.substr(0, offset).split('\n').length + 1) + ':', , 'Not indented']);
 		return match;
