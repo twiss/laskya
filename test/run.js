@@ -42,9 +42,10 @@ function logTable(table) {
 
 // INIT
 
-eval(read('3rdparty/mathcontext.js'));
-eval(read('3rdparty/bigdecimal.js'));
-eval('(function() { ' + read('lib/laskya.js') + ' })();');
+var laskya = require('../lib/laskya');
+var _ = laskya._;
+var BigDecimal = laskya.BigDecimal;
+laskya = laskya.laskya;
 
 
 // CORE TESTS
@@ -77,8 +78,9 @@ function equal(a, b, approx) {
 		});
 	} else if(approx) {
 		return Math.abs(b - a) <= 0.01;
-	} else if(b instanceof ComplexNumber) {
-		return !b.im.compareTo(BigDecimal.prototype.ZERO) && +b.real === a;
+	} else if(laskya.typeOf(b) === 'complexnumber') {
+		
+		return !b.im.compareTo(BigDecimal.ZERO) && +b.real === a;
 	} else {
 		return +b === a;
 	}
@@ -204,15 +206,12 @@ var options = {
 var table = [];
 _.each({
 	'lib/laskya.js': {
-		MathContext: false,
-		BigDecimal: false,
+		MathContext: true,
+		BigDecimal: true,
 		setTimeout: false,
 		clearTimeout: false
 	},
-	'repl/repl.js': {
-		_: false,
-		laskya: false
-	}
+	'repl/repl.js': {}
 }, function(path, globals) {
 	var src = read(path);
 	if(!JSHINT(src, options, globals)) {

@@ -20,9 +20,10 @@ function read(path) {
 	return fs.readFileSync(path, 'utf-8');
 }
 
-eval(read(path.join(__dirname, '..', '3rdparty', 'mathcontext.js')));
-eval(read(path.join(__dirname, '..', '3rdparty', 'bigdecimal.js')));
-eval('(function() { ' + read(path.join(__dirname, '..', 'lib', 'laskya.js')) + ' })();');
+var laskya = require(path.join(__dirname, '..', 'lib', 'laskya'));
+var _ = laskya._;
+var BigDecimal = laskya.BigDecimal;
+laskya = laskya.laskya;
 
 var readline = require('readline'),
 	rl = readline.createInterface({
@@ -52,7 +53,7 @@ rl.on('line', function(input) {
 		var result_display = display(result);
 	} catch(e) {
 		var result = e;
-		var result_display = e.stack;
+		var result_display = e.stack || e + '';
 		var error = true;
 	}
 	var tree_display = display(tree);
@@ -105,7 +106,7 @@ function display(result, parent, rightHand, noParens) {
 					if(_.isArray(input.args)) {
 						if((_.isString(input.value) ? input.value : input.value.value) === 'sqrt') {
 							if(input.args[1]) {
-								if(input.args[1].compareTo(TWO)) {
+								if(input.args[1].compareTo(BigDecimal.TWO)) {
 									input.pro = [constObj(display(input.args[1]))];
 								}
 								input.args = [input.args[0]];
@@ -159,8 +160,8 @@ function display(result, parent, rightHand, noParens) {
 	switch(type) {
 		case 'complexnumber':
 			var op = '+';
-			if(result.im.compareTo(ZERO) === -1) {
-				result.im = result.im.multiply(M_ONE);
+			if(result.im.compareTo(BigDecimal.ZERO) === -1) {
+				result.im = result.im.multiply(BigDecimal.M_ONE);
 				op = '-';
 			}
 			var real = display(result.real),

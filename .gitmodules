@@ -1,0 +1,3 @@
+[submodule "BigDecimal"]
+	path = BigDecimal
+	url = https://github.com/dtrebbien/BigDecimal.js

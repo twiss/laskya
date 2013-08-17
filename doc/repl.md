@@ -216,6 +216,9 @@ NaN and Infinity
 	> NaN + 1
 	< NaN
 	
+	> 1 + NaN
+	< NaN
+	
 	> Infinity + 1
 	< Infinity
 	
@@ -226,6 +229,12 @@ NaN and Infinity
 	< NaN
 	
 	> 0/0
+	< NaN
+	
+	> Infinity + NaN
+	< NaN
+	
+	> floor NaN
 	< NaN
 
 
