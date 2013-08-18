@@ -192,7 +192,7 @@ Logical Operators
 	> True & True & False
 	< False
 	
-	> ~True & False
+	> !True & False
 	> False
 	
 	> 6 & 8
