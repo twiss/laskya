@@ -200,9 +200,9 @@ function display(result, parent, rightHand, noParens) {
 			_.each(result, function(varName, value) {
 				ret += varName + ': ';
 				if(laskya.typeOf(value) === 'oneof') {
-					ret += value.toArray().map(laskya.display).join(' | ');
+					ret += value.toArray().map(display).join(' | ');
 				} else {
-					ret += laskya.display(value);
+					ret += display(value);
 				}
 				ret += '\n';
 			});
