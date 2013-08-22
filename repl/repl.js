@@ -20,10 +20,9 @@ function read(path) {
 	return fs.readFileSync(path, 'utf-8');
 }
 
-var laskya = require(path.join(__dirname, '..', 'lib', 'laskya'));
+var laskya = require(path.join(__dirname, '..', 'lib', 'laskya')).laskya;
 var _ = laskya._;
 var BigDecimal = laskya.BigDecimal;
-laskya = laskya.laskya;
 
 var readline = require('readline'),
 	rl = readline.createInterface({

@@ -1,0 +1,42 @@
+{
+	"name": "Ultimate Calculator",
+	"version": "0.0.1",
+	"manifest_version": 2,
+	"description": "Arbitrary-precision scripting calculator",
+	"browser_action": {
+		"default_icon": "chrome/img/icon-19.png",
+		"default_popup": "chrome/popup.html"
+	},
+	"background": {
+		"scripts": [
+			"chrome/3rdparty/jquery-1.7.2.min.js",
+			"chrome/3rdparty/mathscribe/jqmath-etc-0.2.0.min.js",
+			"chrome/3rdparty/flot/jquery.flot.min.js",
+			"chrome/3rdparty/flot/jquery.flot.crosshair.min.js",
+			"chrome/3rdparty/flot/jquery.flot.navigate.min.js",
+			"BigDecimal/build/BigDecimal-all-last.js",
+			"lib/laskya.js",
+			"chrome/js/background.js"
+		]
+	},
+	"commands": {
+		"toggle-sidewindow": {
+			"suggested_key": {
+				"default": "Ctrl+Shift+Z"
+			},
+			"description": "Open a calculator window on the right side of your screen."
+		},
+		"_execute_browser_action": {
+			"suggested_key": {
+				"default": "Ctrl+Shift+S"
+			}
+		}
+	},
+	"permissions": [],
+	"icons": {
+		"16": "chrome/img/icon-16.png",
+		"48": "chrome/img/icon-48.png",
+		"128": "chrome/img/icon-128.png"
+	},
+	"offline_enabled": true
+}

@@ -35,10 +35,9 @@ function logTable(table) {
 // INIT
 
 if(node) {
-	laskya = require('../lib/laskya');
+	laskya = require('../lib/laskya').laskya;
 	_ = laskya._;
 	BigDecimal = laskya.BigDecimal;
-	laskya = laskya.laskya;
 }
 
 
@@ -225,7 +224,26 @@ if(node) {
 			setTimeout: false,
 			clearTimeout: false
 		},
-		'repl/repl.js': {}
+		'repl/repl.js': {}/*,
+		'chrome/js/background.js': {
+			// Chrome
+			window: false,
+			chrome: false,
+			localStorage: false,
+			
+			// Dependencies
+			laskya: false,
+			_: false,
+			MathContext: false,
+			BigDecimal: false,
+			$: false,
+			jqMath: false
+		},
+		'chrome/js/popup.js': {
+			window: false,
+			chrome: false,
+			document: false
+		}*/
 	}, function(path, globals) {
 		var src = read(path);
 		if(!JSHINT(src, options, globals)) {

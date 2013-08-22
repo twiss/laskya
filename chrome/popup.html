@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Laskya Calculator</title>
+<link rel="stylesheet" href="css/popup.css" />
+<link rel="stylesheet" href="3rdparty/mathscribe/jqmath-0.2.0.css">
+<link rel="icon" href="img/icon-16.png">
+</head>
+
+<body>
+<div id="container">
+	<div id="settings">
+		<div>
+			<a href="#" class="setting selected" data-key="degrad" data-value="r">Radians</a>
+			<a href="#" class="setting" data-key="degrad" data-value="d">Degrees</a>
+		</div>
+		<img src="img/clear.png" id="clear" />
+		<div id="switch_mode">↗</div>
+	</div>
+	<div id="main">
+		<div id="plotstoggle">&#9660;</div>
+		<div id="plotscontainer">
+			<div id="plots"></div>
+		</div>
+		<div id="out"></div>
+		<div id="in">
+			<span id="in_text_toggle">&#9650;</span>
+			<select id="vars_dropdown"></select>
+            <span id="in_text_container">
+				<input type="text" id="in_text" />
+			</span>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="js/popup.js"></script>
+</body>
+</html>
