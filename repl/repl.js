@@ -24,6 +24,13 @@ var laskya = require(path.join(__dirname, '..', 'lib', 'laskya')).laskya;
 var _ = laskya._;
 var BigDecimal = laskya.BigDecimal;
 
+var history = [];
+laskya.addPredef('ans', function(t) {
+	t = history.length - (t || 1);
+	if(t >= 0 && t < history.length) return history[t];
+	throw new RangeError('history item not found');
+}, 'functionnon');
+
 var readline = require('readline'),
 	rl = readline.createInterface({
 		input: process.stdin,
@@ -51,6 +58,7 @@ rl.on('line', function(input) {
 	try {
 		result = laskya.evaluate(input);
 		result_display = display(result);
+		history.push(result);
 	} catch(e) {
 		result = e;
 		result_display = e.stack || e + '';
