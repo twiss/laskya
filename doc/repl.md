@@ -221,29 +221,30 @@ NaN and Infinity
 	> 1 + True
 	< NaN
 	
-	> NaN + 1
-	< NaN
-	
-	> 1 + NaN
-	< NaN
-	
-	> Infinity + 1
-	< Infinity
-	
-	> Infinity - Infinity
-	< Infinity
-	
 	> 1/0
 	< NaN
 	
 	> 0/0
 	< NaN
+
+
+Lists
+=====
+
+	> 1,2,3
+	< (1, 2, 3)
 	
-	> Infinity + NaN
-	< NaN
+	> (1,2),3
+	< ((1, 2), 3)
 	
-	> floor NaN
-	< NaN
+	> ,
+	< ()
+	
+	> 1,
+	< (1)
+	
+	> ,1
+	< (Null, 1)
 
 
 Autocompletion

@@ -65,4 +65,4 @@ following:
 	
 	With this flag, the function is parsed more like a variable
 	(taking no arguments), although you can still pass it
-	arguments by using brackets (`[]`).
+	arguments by using an underscore (`_`).

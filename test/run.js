@@ -159,7 +159,7 @@ if(node) {
 	
 	(function() {
 		var repl = require('child_process').spawn('node', ['./repl/repl.js']);
-		var repltests = read('doc/repl.md').match(/> .+\r?\n\t< .+/g);
+		var repltests = (read('doc/repl.md') + read('test/repl.md')).match(/> .+\r?\n\t< .+/g);
 		var repltest = 0;
 		var table = [];
 		repl.stdout.on('data', function question(data) {
