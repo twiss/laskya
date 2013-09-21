@@ -11,7 +11,7 @@ var laskya = require(path.join(__dirname, '..', 'lib', 'laskya')).laskya;
 var _ = laskya._;
 var BigDecimal = laskya.BigDecimal;
 
-laskya.addPredef('console', function() {
+laskya.addPredef('print', function() {
 	console.log.apply(console, [].map.call(arguments, display));
 }, 'functionentire');
 
