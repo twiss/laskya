@@ -1,5 +1,26 @@
 #!/usr/bin/env node
 
+var fs = require('fs');
+var path = require('path');
+
+function read(path) {
+	return fs.readFileSync(path, 'utf-8');
+}
+
+var laskya = require(path.join(__dirname, '..', 'lib', 'laskya')).laskya;
+var _ = laskya._;
+var BigDecimal = laskya.BigDecimal;
+
+laskya.addPredef('console', function() {
+	console.log.apply(console, [].map.call(arguments, display));
+}, 'functionentire');
+
+if(process.argv[2]) {
+	var contents = read(process.argv[2]);
+	if(contents[0] + contents[1] === '#!') contents = contents.substr(contents.indexOf('\n'));
+	return laskya.evaluate(contents);
+}
+
 var stop = false;
 process.argv.forEach(function(arg) {
 	if(arg === '--help') {
@@ -12,17 +33,6 @@ process.argv.forEach(function(arg) {
 if(stop) return;
 
 console.log('Welcome to the Laskya REPL! See laskya --help for help.');
-
-var fs = require('fs');
-var path = require('path');
-
-function read(path) {
-	return fs.readFileSync(path, 'utf-8');
-}
-
-var laskya = require(path.join(__dirname, '..', 'lib', 'laskya')).laskya;
-var _ = laskya._;
-var BigDecimal = laskya.BigDecimal;
 
 var history = [];
 laskya.addPredef('ans', function(t) {
