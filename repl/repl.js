@@ -18,7 +18,8 @@ laskya.addPredef('exit', function(code) {
 	process.exit(code);
 });
 
-var jserrors = _.contains(process.argv, '--jserrors');
+var argv = require('optimist').argv;
+
 function getStack(e) {
 	var stack = e + '\n';
 	var file = laskya.currentToken.file, line = laskya.currentToken.line, ch = laskya.currentToken.ch;
@@ -31,17 +32,20 @@ function getStack(e) {
 	return stack;
 }
 
-if(process.argv[2]) {
-	var contents = read(process.argv[2]);
-	if(contents[0] + contents[1] === '#!') contents = contents.substr(contents.indexOf('\n'));
-	laskya.debuggingStack = [];
-	try {
-		return laskya.calculate(laskya.parse(laskya.tokenize(contents, process.argv[2])));
-	} catch(e) {
-		if(jserrors) throw e;
-		console.log(getStack(e));
-		return;
-	}
+if(argv._.length) {
+	_.each(argv._, function(path) {
+		var contents = read(path);
+		if(contents[0] + contents[1] === '#!') contents = contents.substr(contents.indexOf('\n'));
+		laskya.debuggingStack = [];
+		try {
+			laskya.calculate(laskya.parse(laskya.tokenize(contents, path)));
+		} catch(e) {
+			if(argv.jserrors) throw e;
+			console.log(getStack(e));
+			return false;
+		}
+	});
+	return;
 }
 
 var stop = false;
@@ -94,7 +98,7 @@ rl.on('line', function(input) {
 		history.push(result);
 	} catch(e) {
 		result = e;
-		result_display = jserrors ? (e.stack || e + '') : getStack(e);
+		result_display = argv.jserrors ? (e.stack || e + '') : getStack(e);
 		error = true;
 	}
 	var tree_display = display(tree);

@@ -4,6 +4,9 @@
 	"description": "A calculator in javascript",
 	"bugs": "http://github.com/twiss/laskya/issues",
 	"author": "Daniel Huigens <d.huigens@gmail.com>",
+	"dependencies": {
+		"optimist": "0.6.x"
+	},
 	"devDependencies": {
 		"jshint": "2.1.x"
 	},
