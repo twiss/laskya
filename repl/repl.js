@@ -14,11 +14,34 @@ var BigDecimal = laskya.BigDecimal;
 laskya.addPredef('print', function() {
 	console.log.apply(console, [].map.call(arguments, display));
 }, 'functionentire');
+laskya.addPredef('exit', function(code) {
+	process.exit(code);
+});
+
+var jserrors = _.contains(process.argv, '--jserrors');
+function getStack(e) {
+	var stack = e + '\n';
+	var file = laskya.currentToken.file, line = laskya.currentToken.line, ch = laskya.currentToken.ch;
+	_.each(laskya.debuggingStack.reverse().slice(0, 9).concat([{value: 'main'}]), function(layer) {
+		var fn = layer.value.value || layer.value;
+		if(_.isFunction(fn)) fn = fn.name || 'anonymous';
+		stack += '    at ' + fn           + ' (' + file + ':' + line + ':' + ch + ')\n';
+		file = layer.file; line = layer.line; ch = layer.ch;
+	});
+	return stack;
+}
 
 if(process.argv[2]) {
 	var contents = read(process.argv[2]);
 	if(contents[0] + contents[1] === '#!') contents = contents.substr(contents.indexOf('\n'));
-	return laskya.evaluate(contents);
+	laskya.debuggingStack = [];
+	try {
+		return laskya.calculate(laskya.parse(laskya.tokenize(contents, process.argv[2])));
+	} catch(e) {
+		if(jserrors) throw e;
+		console.log(getStack(e));
+		return;
+	}
 }
 
 var stop = false;
@@ -63,15 +86,15 @@ rl.setPrompt('> ');
 rl.prompt();
 
 rl.on('line', function(input) {
-	var tree = laskya.parse(laskya.tokenize(input));
+	var tree = laskya.parse(laskya.tokenize(input, 'repl'));
 	var result, result_display, error;
 	try {
-		result = laskya.evaluate(input);
+		result = laskya.execute(tree);
 		result_display = display(result);
 		history.push(result);
 	} catch(e) {
 		result = e;
-		result_display = e.stack || e + '';
+		result_display = jserrors ? (e.stack || e + '') : getStack(e);
 		error = true;
 	}
 	var tree_display = display(tree);
